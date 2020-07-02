@@ -251,7 +251,7 @@ namespace eosiosystem {
           * @param code - the code content to be set, in the form of a blob binary..
           */
          [[eosio::action]]
-         void setcode( const name& account, uint8_t vmtype, uint8_t vmversion, const std::vector<char>& code ) {}
+         void setcode( const name& account, uint8_t vmtype, uint8_t vmversion, const std::vector<char>& code );
 
          /** @}*/
 

@@ -128,4 +128,17 @@ ACTION info::deluserkey(const name user, const name key)
   idx.erase(itr);
 }
 
+void info::freezecode(const name account)
+{
+  // requires owner permission to freeze code
+  require_auth(permission_level{account, name("owner")});
+
+  frozen_table table(_self, _self.value);
+  auto itr = table.find(account.value);
+
+  check(itr == table.end(), "account already frozen");
+
+  table.emplace(account, [&](auto &t) { t.account = account; });
+}
+
 } /// namespace eosio

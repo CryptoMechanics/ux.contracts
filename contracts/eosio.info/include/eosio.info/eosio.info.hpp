@@ -83,6 +83,15 @@ namespace eosio {
           */
          ACTION deluserkey(const name user, const name key);
 
+         /**
+          * Freezes the current code deployed on account, making all future code updates fail
+          *
+          * @param account - the account to freeze
+          *
+          * @pre record must not be present in frozencode table
+          */
+         ACTION freezecode(const name account);
+
 
          static uint128_t composite_key(const uint64_t &x, const uint64_t &y) {
             return (uint128_t{x} << 64) | y;
@@ -131,6 +140,16 @@ namespace eosio {
             uint64_t by_key() const {return key.value; }
          };
 
+         /**
+          * stores contracts that are frozen and cannot be updated anymore
+          */
+         struct [[eosio::table]] frozencode {
+            name      account;
+
+            uint64_t primary_key() const { return account.value; }
+         };
+
+         public:
          typedef eosio::multi_index< "keytypes"_n, keytype > keytypes_table;
          typedef eosio::multi_index< "userverifs"_n, userverif,
             indexed_by<"ckey"_n, const_mem_fun<userverif, uint128_t, &userverif::by_ckey> >, 
@@ -139,6 +158,7 @@ namespace eosio {
          typedef eosio::multi_index< "userkeys"_n, userkey,
             indexed_by<"ckey"_n, const_mem_fun<userkey, uint128_t, &userkey::by_ckey> >, 
             indexed_by<"user"_n, const_mem_fun<userkey, uint64_t, &userkey::by_user> > > userkeys_table;
+         typedef eosio::multi_index< "frozencode"_n, frozencode > frozen_table;
 
    };
 
