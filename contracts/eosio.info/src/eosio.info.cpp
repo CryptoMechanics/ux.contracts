@@ -90,6 +90,8 @@ ACTION info::adduserver(const name kyc_account, const name user, const name veri
     t.verification_key = verification_key;
     t.timestamp = current_time_point();
   });
+
+  require_recipient(kyc_account);
 }
 
 ACTION info::deluserver(const name kyc_account, const name user, const name verification_key)
@@ -116,6 +118,8 @@ ACTION info::deluserver(const name kyc_account, const name user, const name veri
   check(itr != idx.end(), "user verification not present");
 
   idx.erase(itr);
+
+  require_recipient(kyc_account);
 }
 
 ACTION info::setuserkey(const name user, const name key, const std::string memo)
